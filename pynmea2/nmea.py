@@ -78,9 +78,12 @@ class NMEASentence(object):
         self.talker = talker
         self.type = sentence_type
         self.data = data
+        self.fields = self.fields[:len(self.data)] 
 
     def __getattr__(self, name):
         t = type(self)
+        if name not in t.name_to_idx:
+            raise AttributeError('Sentence type %s has no attribute %s' % (self.type, name))
         i = t.name_to_idx[name]
         f = t.fields[i]
         v = self.data[i]
